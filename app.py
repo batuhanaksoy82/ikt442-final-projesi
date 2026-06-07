@@ -20,7 +20,7 @@ try:
     client = gspread.authorize(credentials)
     sheet = client.open_by_url(google_sheet_url).sheet1
 except Exception as e:
-    st.error("Sistem ayarları (API veya Google Sheets) henüz yapılmadı. Lütfen Ayarları kontrol edin.")
+    st.error(f"Sistem Ayarlarında Hata Var! Gerçek Hata: {e}")
     st.stop()
 
 # Kullanıcı Giriş Alanları
@@ -33,14 +33,14 @@ if st.button("🚀 Kariyer Tavsiyesi Al"):
         with st.spinner("Yapay Zeka profilinizi analiz ediyor..."):
             
             # OpenAI Prompt'u
-            prompt = f"Ben {isim}. {bolum} bölümü öğrencisi/mezunuyum. Yeteneklerim ve ilgi alanlarım şunlar: {yetenekler}. Bana uygun 2 meslek tavsiyesi ve bu meslekler için öğrenmem gereken 2 önemli beceriyi kısa và öz şekilde açıkla."
+            prompt = f"Ben {isim}. {bolum} bölümü öğrencisi/mezunuyum. Yeteneklerim ve ilgi alanlarım şunlar: {yetenekler}. Bana uygun 2 meslek tavsiyesi ve bu meslekler için öğrenmem gereken 2 önemli beceriyi kısa ve öz şekilde açıkla."
             
             try:
                 # OpenAI API Çağrısı
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
                     messages=[
-                        {"role": "system", "content": "Sen uzman bir kariyer danışmanısın. Yanıtların motive edici, net và kısa olmalı."},
+                        {"role": "system", "content": "Sen uzman bir kariyer danışmanısın. Yanıtların motive edici, net ve kısa olmalı."},
                         {"role": "user", "content": prompt}
                     ]
                 )
