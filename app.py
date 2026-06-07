@@ -33,7 +33,7 @@ if st.button("🚀 Kariyer Tavsiyesi Al"):
         with st.spinner("Yapay Zeka profilinizi analiz ediyor..."):
             
             # OpenAI Prompt'u
-            prompt = f"Ben {isim}. {bolum} bölümü öğrencisi/mezunuyum. Yeteneklerim ve ilgi alanlarım şunlar: {yetenekler}. Bana uygun 2 meslek tavsiyesi ve bu meslekler için öğrenmem gereken 2 önemli beceriyi kısa ve öz şekilde açıkla."
+            prompt = f"Ben {isim}. {bolum} bölümü öğrencisi/mezunuyum. Yeteneklerim ve ilgi alanlarım şunlar: {yetenekler}. Bana uygun 2 meslek tavsiyesi ve bu meslekler için öğrenmem gereken 2 önemli beceriyi kısa và öz şekilde açıkla."
             
             try:
                 # OpenAI API Çağrısı
@@ -58,7 +58,7 @@ if st.button("🚀 Kariyer Tavsiyesi Al"):
                 satir_verisi = [zaman, isim, bolum, yetenekler, tavsiye_metni]
                 sheet.append_row(satir_verisi)
                 
-      st.toast('Verileriniz başarıyla veritabanına (Google Sheets) kaydedildi!', icon='✅')
+                st.toast('Verileriniz başarıyla veritabanına (Google Sheets) kaydedildi!', icon='✅')
 
             except Exception as e:
                 st.error(f"Bir hata oluştu: {e}")
