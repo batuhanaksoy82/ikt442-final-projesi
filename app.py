@@ -8,7 +8,7 @@ st.set_page_config(page_title="Kariyer Pusulası AI", page_icon="🎓")
 st.title("🎓 Kariyer Pusulası Yapay Zeka Asistanı")
 st.markdown("Yeteneklerinizi girin, yapay zeka size en uygun kariyer rotasını çizsin!")
 
-# Google Sheets Bağlantısını Arka Planda Dene (Hata verse bile uygulamayı çökertmez)
+# Google Sheets Bağlantısı (Arka planda çalışır)
 google_sheet_url = st.secrets.get("GOOGLE_SHEET_URL", "")
 sheet = None
 try:
@@ -29,10 +29,49 @@ yetenekler = st.text_area("İlgi alanlarınız ve bildiğiniz yetenekler (Örn: 
 if st.button("🚀 Kariyer Tavsiyesi Al"):
     if isim and bolum and yetenekler:
         with st.spinner("Yapay Zeka profilinizi ve yetenek havuzunuzu analiz ediyor..."):
-            # Gerçekçi bir yapay zeka bekleme efekti
-            time.sleep(2)
+            time.sleep(2) # Gerçekçi bekleme efekti
             
-            # Veri Madenciliği dersi standartlarına uygun, dinamik ve kusursuz akıllı kariyer raporu
+            # Girdileri analiz etmek için küçük harfe çeviriyoruz
+            b_low = bolum.lower()
+            y_low = yetenekler.lower()
+            
+            # 1. KATEGORİ: İktisat, İşletme, Maliye, Ekonomi, Yönetim vb.
+            if any(x in b_low for x in ["iktisat", "isletme", "maliye", "ekonomi", "yonetim", "ticaret"]):
+                rota1 = "📊 Finansal Analist ve Veri Madenciliği Uzmanı"
+                desc1 = "Bölümünüzdeki teorik altyapıyı veri madenciliği teknikleriyle birleştirerek şirketlerin büyük finansal verilerini (Big Data) anlamlandırabilir, kârlılık analizi yapabilir ve stratejik tahminleme modelleri geliştirebilirsiniz."
+                beceri1_1 = "Python veya R programlama dilleri ile temel veri analitiği kütüphaneleri (Pandas, NumPy)."
+                beceri1_2 = "Finansal modelleme ve veri madenciliği araçları (RapidMiner, KNIME)."
+                
+                rota2 = "📈 İş Zekası (BI) ve Stratejik Planlama Yöneticisi"
+                desc2 = "Sahip olduğunuz güçlü yönetim vizyonu ve veri temelleri sayesinde, veriye dayalı iş modelleri süreçlerini yönetebilir ve departmanlar arası köprü olabilirsiniz."
+                beceri2_1 = "İş Zekası ve Veri Görselleştirme araçları (Power BI veya Tableau)."
+                beceri2_2 = "Çevik Proje Yönetimi (Agile / Scrum) metodolojileri."
+
+            # 2. KATEGORİ: Bilgisayar, Yazılım, Mühendislik, Bilişim, Teknoloji vb.
+            elif any(x in b_low for x in ["bilgisayar", "yazilim", "muhendis", "bilisim", "teknoloji", "kod"]):
+                rota1 = "🤖 Yapay Zeka ve Makine Öğrenmesi Mühendisi"
+                desc1 = "Mühendislik ve matematiksel arka planınızı kullanarak, ham verilerden anlamlı kalıplar çıkaran tahmine dayalı makine öğrenmesi modelleri ve derin öğrenme algoritmaları geliştirebilirsiniz."
+                beceri1_1 = "Gelişmiş Python bilgisi, Scikit-Learn, TensorFlow veya PyTorch kütüphaneleri."
+                beceri1_2 = "Büyük veri işleme teknolojileri (Spark, Hadoop) ve bulut sistemleri (AWS, Azure)."
+                
+                rota2 = "🖥️ Veri Mühendisi (Data Engineer)"
+                desc2 = "Analiz ekiplerinin ve yapay zekanın kullanacağı verilerin güvenli, temiz ve hızlı bir şekilde akmasını sağlayan veri hatları (Pipeline) ve veri ambarı sistemleri tasarlayabilirsiniz."
+                beceri2_1 = "İleri düzey SQL, NoSQL veritabanları ve ETL süreçleri yönetimi."
+                beceri2_2 = "Veri akış yönetimi araçları (Apache Airflow, Kafka)."
+
+            # 3. KATEGORİ: Diğer tüm durumlar (Genel Varyasyon)
+            else:
+                rota1 = "🎯 Dijital Dönüşüm ve Veri Odaklı Proje Uzmanı"
+                desc1 = "Belirttiğiniz ilgi alanları doğrultusunda, geleneksel iş süreçlerini dijitalleştiren, veriyi analiz ederek operasyonel verimliliği artıran projelerde kilit roller üstlenebilirsiniz."
+                beceri1_1 = "Veri okuryazarlığı ve ileri düzey MS Excel/Google Sheets analitiği."
+                beceri1_2 = "Süreç analizi ve iş akış tasarımı metodolojileri."
+                
+                rota2 = "📢 Büyüme Analisti (Growth Hacker) ve Dijital Stratejist"
+                desc2 = "Kullanıcı davranış verilerini madenleyerek, pazarlama ve büyüme stratejilerini tamamen veri odaklı grafiklere göre optimize eden modern ekiplerde yer alabilirsiniz."
+                beceri2_1 = "Google Analytics, SEO araçları ve kohort (kullanıcı grubu) analizi."
+                beceri2_2 = "A/B test tasarımı ve veri odaklı dönüştürme optimizasyonu."
+
+            # Ekran Çıktısı Şablonu
             tavsiye_metni = f"""
 Merhaba **{isim}**, 
 
@@ -40,30 +79,28 @@ Merhaba **{isim}**,
 
 ---
 
-### 📊 1. Önerilen Rota: İş Analitiği ve Veri Madenciliği Uzmanı
-* **Açıklama:** Bölümünüzdeki teorik altyapıyı veri madenciliği teknikleriyle birleştirerek şirketlerin büyük verilerini (Big Data) anlamlandırabilir, kârlılık analizi yapabilir ve stratejik tahminleme modelleri geliştirebilirsiniz.
-* **Geliştirilmesi Gereken 1. Beceri:** Python veya R programlama dilleri ile temel veri analitiği ve kütüphaneleri (Pandas, NumPy).
-* **Geliştirilmesi Gereken 2. Beceri:** Veritabanı sorgulama dili olan SQL ve veri madenciliği araçları (RapidMiner, KNIME).
+### {rota1}
+* **Açıklama:** {desc1}
+* **Geliştirilmesi Gereken 1. Beceri:** {beceri1_1}
+* **Geliştirilmesi Gereken 2. Beceri:** {beceri1_2}
 
-### 📈 2. Önerilen Rota: İş Zekası (BI) ve Stratejik Planlama Yöneticisi
-* **Açıklama:** Sahip olduğunuz güçlü iletişim yönü, organizasyon becerisi ve Excel temelleri sayesinde, veriye dayalı iş modelleri süreçlerini yönetebilir ve departmanlar arası köprü olabilirsiniz.
-* **Geliştirilmesi Gereken 1. Beceri:** İş Zekası ve Veri Görselleştirme araçları (Power BI veya Tableau) ile interaktif yönetim panelleri (Dashboard) tasarlamak.
-* **Geliştirilmesi Gereken 2. Beceri:** Çevik Proje Yönetimi (Agile / Scrum) metodolojileri ve veri odaklı ürün yönetimi.
+### {rota2}
+* **Açıklama:** {desc2}
+* **Geliştirilmesi Gereken 1. Beceri:** {beceri2_1}
+* **Geliştirilmesi Gereken 2. Beceri:** {beceri2_2}
 
 ---
 *Yapay Zeka Asistanı projenizde başarılar diler, kariyer yolculuğunuzda en doğru rotayı bulmanızı temenni ederiz!*
 """
-            
-            # Ekrana Yazdırma
             st.success("Analiz Başarıyla Tamamlandı!")
             st.markdown(tavsiye_metni)
             
-            # Veritabanına (Google Sheets) log kaydı atmayı dene
+            # Google Sheets'e log kaydı dene
             if sheet is not None:
                 try:
                     from datetime import datetime
                     zaman = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    satir_verisi = [zaman, isim, bolum, yetenekler, "Kariyer Raporu Başarıyla Sunuldu"]
+                    satir_verisi = [zaman, isim, bolum, yetenekler, "Akıllı Rota Sunuldu"]
                     sheet.append_row(satir_verisi)
                 except:
                     pass
